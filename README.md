@@ -6,18 +6,23 @@
 [![StyleCI](https://styleci.io/repos/63791110/shield)](https://styleci.io/repos/63791110)
 [![Packagist](https://img.shields.io/packagist/v/plank/laravel-mediable.svg?style=flat-square)](https://packagist.org/packages/plank/laravel-mediable)
 
-Laravel-Mediable is a package for easily uploading and attaching media files to models with Laravel 5.
+Laravel-Mediable là một gói tập tin dễ dàng cho phép upload và gắn tập tin vào các model trog laravel 5.
+
 
 ## Features
 
-- Filesystem-driven approach is easily configurable to allow any number of upload directories with different accessibility.
-- Many-to-many polymorphic relationships allow any number of media to be assigned to any number of other models without any need to modify the schema.
-- Attach media to models with tags, to set and retrieve media for specific purposes, such as `'thumbnail'`, `'featured image'`, `'gallery'` or `'download'`.
-- Easily query media and restrict uploads by MIME type, extension and/or aggregate type (e.g. `image` for jpeg, png or gif).
+- Filesystem-driven phương pháp tiếp cận cho phép dễ dàng tải nên bất kỳ số lượng file dễ dàng cấu hình để cho phép tải lên đến nhiều số lượng các thư mục với khả năng tiếp cận khác nhau.
+- Many-to-many  mối quan hệ nhiều nhiêu cho phép bất kỳ số lượng media file tải lên được giao cho bất kỳ một model "bảng dữ liệu"  mà không cần sửa đổi "schema"  cấu trúc bảng dữ liệu.
+- Gán media tới các model mở rộng gán thẻ tag. cho phép thiết lập và để lấy media file cho các mục đích khác nhau `thumbnail`,`avata`,`abum`,`featured image`,`gallery'` or `'download`.
+- Dễ dàng truy vấn media file và uploads hạn chế "Mime Type " của file và đuôi mở rộng "extensionsEasily"  hoặc cả 2  "extension and/or" trong thống kê danh sách "aggregate type"
 
 ## Example Usage
 
-Upload a file to the server, and place it in a directory on the filesystem disk named "uploads". This will create a Media record that can be used to refer to the file.
+Ví dụ sử dụng :
+
+Upload 1 file từ server và nơi ở trong 1 thư mục của hệ thống quản lý tập tin như names disk "uploads" trong filesystem disk.
+Điều này tạo ra một media ghi chép sử dụng để tham khảo tới file.
+
 
 ```php
 $media = MediaUploader::fromSource($request->file('thumb'))
@@ -25,14 +30,28 @@ $media = MediaUploader::fromSource($request->file('thumb'))
 	->upload();
 ```
 
-Attach the Media to another eloquent model with one or more tags defining their relationship.
+
+
+Đính kèm media cho một mối quan hệ với bảng model với một mối quan hệ và định nghĩa thẻ tag cho mối quan hệ đó
+
+Bạn có thể đính kèm media cho model của bạn giống như môt ví dụ sau : 
 
 ```php
 $post = Post::create($this->request->input());
 $post->attachMedia($media, ['thumbnail']);
 ```
 
-Retrieve the media from the model by its tag(s).
+Bạn có thể đính nhiều file cho một model bằng $media1->getKey() với 1 thẻ tag :
+
+$post->attachMedia([$media1->getKey(), $media2->getKey()], 'gallery');
+
+Hoặc ngược lại :
+
+$post->attachMedia($media, ['gallery', 'featured']);
+
+
+
+Gắn các  media tới  model với 1 thẻ tag(s).
 
 ```php
 $post->getMedia('thumbnail')->first()->getUrl();
